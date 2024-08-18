@@ -71,21 +71,21 @@ export default function Home() {
             className={`bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded ${loading ? 'cursor-not-allowed' : ''}`}
             disabled={loading}
           >
-            {loading ? 'Baixando dados...' : 'Baixar dados do Sistema'}
+            {loading ? 'Baixando dados...' : 'Baixar dados'}
           </button>
           <button
             onClick={saveData}
             className={`bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded ml-2 ${loading ? 'cursor-not-allowed' : ''}`}
             disabled={loading}
           >
-            {loading ? 'Carregando' : 'Atualizar dados'}
+            {loading ? 'Salvando dados...' : 'Atualizar dados'}
           </button>
           <button
             onClick={fetchData}
             className={`bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded ml-2 ${loading ? 'cursor-not-allowed' : ''}`}
             disabled={loading}
           >
-            {loading ? 'Carregando' : 'Mostrar dados da Página'}
+            {loading ? 'Buscando dados...' : 'Mostrar dados'}
           </button>
         </div>
         <div className="overflow-x-auto">
