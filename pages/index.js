@@ -63,7 +63,12 @@ export default function Home() {
           <h1 className="text-3xl font-bold">Atualizar Tabela</h1>
         </div>
       </header>
-      <main className="flex-1 p-6">
+      <main className="flex-1 p-6 relative">
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50">
+            <div className="w-16 h-16 border-4 border-blue-600 border-t-transparent border-solid rounded-full animate-spin"></div>
+          </div>
+        )}
         <div className="mb-4">
           <button
             onClick={scrapeData}
@@ -188,7 +193,7 @@ export default function Home() {
         )}
       </main>
       <footer className="bg-gray-800 p-4 text-center">
-        <p className="text-gray-400">&copy; ccsufgd</p>
+        <p className="text-gray-400">&copy; @tgszwdv</p>
       </footer>
     </div>
   );
