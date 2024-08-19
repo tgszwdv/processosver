@@ -22,10 +22,6 @@ export default function Home() {
     return null;
   }
 
-  // Verifica se o usuário tem permissão para acessar a página
-  // A validação foi movida para a configuração do NextAuth
-  // e não é mais necessária aqui.
-
   const scrapeData = async () => {
     setLoading(true);
     try {
