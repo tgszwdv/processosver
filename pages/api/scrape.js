@@ -1,12 +1,13 @@
-// pages/api/scrape.js
-import { chromium } from 'playwright';
+const chromium = require('@sparticuz/chromium');
+const puppeteer = require('puppeteer-core');
 
 export default async function handler(req, res) {
-  let browser;
+  let browser = null;
 
   try {
-    browser = await chromium.launch({
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    browser = await puppeteer.launch({
+      args: chromium.args,
+      executablePath: await chromium.executablePath(),
       headless: true,
       // Descomente a linha abaixo se precisar de uma viewport padrão
       // defaultViewport: { width: 1280, height: 720 },
@@ -14,7 +15,7 @@ export default async function handler(req, res) {
 
     const page = await browser.newPage();
     const url = 'https://selecao-login.app.ufgd.edu.br/';
-    await page.goto(url, { waitUntil: 'networkidle' });
+    await page.goto(url, { waitUntil: 'networkidle0' });
 
     const processos = await page.evaluate(() => {
       const processos = [];
