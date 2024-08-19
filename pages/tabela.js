@@ -1,4 +1,3 @@
-// components/Tabela.js
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -31,8 +30,16 @@ export default function Tabela() {
         <tbody className="divide-y divide-gray-700">
           {data.map((processo, index) => (
             <tr key={index}>
-              <td className="px-4 py-2 text-white">{processo.descricao}</td>
-              <td className="px-4 py-2 text-white">{processo.periodo}</td>
+              <td className="px-4 py-2 text-white">
+                <a href={processo.url}  rel="noopener noreferrer" className="block w-full h-full">
+                  {processo.titulo}
+                </a>
+              </td>
+              <td className="px-4 py-2 text-white">
+                <a href={processo.url} rel="noopener noreferrer" className="block w-full h-full">
+                  {processo.periodo}
+                </a>
+              </td>
             </tr>
           ))}
         </tbody>
