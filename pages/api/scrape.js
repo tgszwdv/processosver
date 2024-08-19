@@ -1,29 +1,29 @@
-import puppeteer from 'puppeteer-core';
-import chromium from 'chrome-aws-lambda';
+// pages/api/scrape.js
+import { chromium } from 'playwright';
 
 export default async function handler(req, res) {
   let browser;
 
   try {
-    // Inicie o Puppeteer com o Chrome fornecido pelo chrome-aws-lambda
-    browser = await puppeteer.launch({
-      args: chromium.args,
-      executablePath: await chromium.executablePath,
-      headless: chromium.headless,
+    browser = await chromium.launch({
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      headless: true,
+      // Descomente a linha abaixo se precisar de uma viewport padrão
+      // defaultViewport: { width: 1280, height: 720 },
     });
 
     const page = await browser.newPage();
     const url = 'https://selecao-login.app.ufgd.edu.br/';
-    await page.goto(url, { waitUntil: 'networkidle2' });
+    await page.goto(url, { waitUntil: 'networkidle' });
 
     const processos = await page.evaluate(() => {
       const processos = [];
       const rows = document.querySelectorAll('tr[ng-repeat="processo in ctrl.inscricoesAbertas track by $index"]');
-
+      
       rows.forEach((row) => {
         const cells = row.querySelectorAll('td');
         const titulo = cells[0].innerText.trim();
-        const descricao = cells[1].innerText.trim().replace('Mostrar mais', '').trim();
+        const descricao = querySelectorAllquerySelectorAllcells[1].innerText.trim().replace('Mostrar mais', '').trim();
         const periodo = cells[2].innerText.trim();
         const editalUrl = cells[3].querySelector('a') ? cells[3].querySelector('a').href : '';
         const paginaUrl = cells[4].querySelector('a') ? cells[4].querySelector('a').href : '';
@@ -38,11 +38,10 @@ export default async function handler(req, res) {
           });
         }
       });
-
+      
       return processos;
     });
 
-    console.log(processos);
     res.status(200).json({ processos });
   } catch (error) {
     console.error('Erro ao acessar a página de scraping:', error.message);
