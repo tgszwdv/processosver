@@ -1,5 +1,0 @@
-{
-    "env": {
-      "PUPPETEER_EXECUTABLE_PATH": "/usr/bin/google-chrome"
-    }
-  }
