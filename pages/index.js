@@ -6,7 +6,6 @@ export default function Home() {
   const [data, setData] = useState([]);
   const [mongoData, setMongoData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [showUpdatedData, setShowUpdatedData] = useState(false);
   const [showMongoData, setShowMongoData] = useState(false);
 
   const scrapeData = async () => {
@@ -153,7 +152,7 @@ export default function Home() {
         {showMongoData && (
           <div className="overflow-x-auto mt-6">
             <div className="w-full">
-              <h2 className="text-2xl font-semibold mb-4">Dados do MongoDB</h2>
+              <h2 className="text-2xl font-semibold mb-4">Dados do BD</h2>
               <table className="w-full divide-y divide-gray-700 bg-gray-800 rounded-lg">
                 <thead className="bg-gray-700">
                   <tr>
@@ -189,7 +188,7 @@ export default function Home() {
         )}
       </main>
       <footer className="bg-gray-800 p-4 text-center">
-        <p className="text-gray-400">&copy; 2024 Seu Projeto</p>
+        <p className="text-gray-400">&copy; ccsufgd</p>
       </footer>
     </div>
   );
