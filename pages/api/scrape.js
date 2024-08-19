@@ -1,20 +1,15 @@
-const puppeteer = require('puppeteer');
+import puppeteer from 'puppeteer-core';
+import chromium from 'chrome-aws-lambda';
 
 export default async function handler(req, res) {
   let browser;
 
   try {
+    // Inicie o Puppeteer com o Chrome fornecido pelo chrome-aws-lambda
     browser = await puppeteer.launch({
-      args: [
-        "--disable-setuid-sandbox",
-        "--no-sandbox",
-        "--single-process",
-        "--no-zygote",
-      ],
-      executablePath:
-        process.env.NODE_ENV === "production"
-          ? process.env.PUPPETEER_EXECUTABLE_PATH
-          : puppeteer.executablePath(),
+      args: chromium.args,
+      executablePath: await chromium.executablePath,
+      headless: chromium.headless,
     });
 
     const page = await browser.newPage();
@@ -24,7 +19,7 @@ export default async function handler(req, res) {
     const processos = await page.evaluate(() => {
       const processos = [];
       const rows = document.querySelectorAll('tr[ng-repeat="processo in ctrl.inscricoesAbertas track by $index"]');
-      
+
       rows.forEach((row) => {
         const cells = row.querySelectorAll('td');
         const titulo = cells[0].innerText.trim();
@@ -43,9 +38,10 @@ export default async function handler(req, res) {
           });
         }
       });
-      
+
       return processos;
     });
+
     console.log(processos);
     res.status(200).json({ processos });
   } catch (error) {
