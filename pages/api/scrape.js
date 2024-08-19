@@ -1,33 +1,21 @@
-import chromium from 'chrome-aws-lambda';
-import puppeteer from 'puppeteer-core';
-
-// Condicional para definir o Puppeteer e opções de execução
-let puppeteerCore;
-let options = {};
-
-if (process.env.NODE_ENV === 'production') {
-  puppeteerCore = puppeteer;
-  options = {
-    args: [...chromium.args, "--hide-scrollbars", "--disable-web-security"],
-    defaultViewport: chromium.defaultViewport,
-    executablePath: await chromium.executablePath,
-    headless: true,
-    ignoreHTTPSErrors: true,
-  };
-} else {
-  puppeteerCore = require('puppeteer');
-  options = {
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    headless: true,
-  };
-}
+const puppeteer = require('puppeteer');
 
 export default async function handler(req, res) {
   let browser;
 
   try {
-    // Lançamento do browser com as opções configuradas
-    browser = await puppeteerCore.launch(options);
+    browser = await puppeteer.launch({
+      args: [
+        "--disable-setuid-sandbox",
+        "--no-sandbox",
+        "--single-process",
+        "--no-zygote",
+      ],
+      executablePath:
+        process.env.NODE_ENV === "production"
+          ? process.env.PUPPETEER_EXECUTABLE_PATH
+          : puppeteer.executablePath(),
+    });
 
     const page = await browser.newPage();
     const url = 'https://selecao-login.app.ufgd.edu.br/';
@@ -58,7 +46,6 @@ export default async function handler(req, res) {
       
       return processos;
     });
-
     console.log(processos);
     res.status(200).json({ processos });
   } catch (error) {
