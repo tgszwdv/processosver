@@ -1,12 +1,30 @@
 import { useState } from 'react';
 import axios from 'axios';
 import ContentEditable from 'react-contenteditable';
+import { useSession, signOut } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 export default function Home() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
   const [data, setData] = useState([]);
   const [mongoData, setMongoData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showMongoData, setShowMongoData] = useState(false);
+
+  if (status === 'loading') {
+    return <p>Loading...</p>;
+  }
+
+  if (!session) {
+    router.push('/api/auth/signin');
+    return null;
+  }
+
+  // Verifica se o usuário tem permissão para acessar a página
+  // A validação foi movida para a configuração do NextAuth
+  // e não é mais necessária aqui.
 
   const scrapeData = async () => {
     setLoading(true);
@@ -59,8 +77,17 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">
       <header className="bg-gray-800 p-6 shadow-md">
-        <div className="container mx-auto">
-          <h1 className="text-3xl font-bold">Atualizar Tabela</h1>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <h1 className="text-3xl font-bold">Atualizar Tabela</h1>
+            <p className="text-lg">Olá, {session.user.name}</p>
+          </div>
+          <button
+            onClick={() => signOut()}
+            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded"
+          >
+            Logout
+          </button>
         </div>
       </header>
       <main className="flex-1 p-6 relative">
@@ -192,9 +219,6 @@ export default function Home() {
           </div>
         )}
       </main>
-      <footer className="bg-gray-800 p-4 text-center">
-        <p className="text-gray-400">&copy; @tgszwdv</p>
-      </footer>
     </div>
   );
 }
