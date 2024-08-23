@@ -45,6 +45,22 @@ export default function Home() {
     setData(updatedData);
   };
 
+  const moveUp = (index) => {
+    if (index > 0) {
+      const updatedData = [...data];
+      [updatedData[index - 1], updatedData[index]] = [updatedData[index], updatedData[index - 1]];
+      setData(updatedData);
+    }
+  };
+
+  const moveDown = (index) => {
+    if (index < data.length - 1) {
+      const updatedData = [...data];
+      [updatedData[index + 1], updatedData[index]] = [updatedData[index], updatedData[index + 1]];
+      setData(updatedData);
+    }
+  };
+
   const saveData = async () => {
     setLoading(true);
     try {
@@ -120,6 +136,7 @@ export default function Home() {
             <table className="w-full divide-y divide-gray-700 bg-gray-800 rounded-lg">
               <thead className="bg-gray-700">
                 <tr>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">Ord</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">Título</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">Descrição</th>
                   <th className="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase">Período</th>
@@ -131,6 +148,22 @@ export default function Home() {
               <tbody className="divide-y divide-gray-700">
                 {data.map((processo, index) => (
                   <tr key={index}>
+                    <td className="px-4 py-4 text-center">
+                      <button
+                        onClick={() => moveUp(index)}
+                        className="text-white text-xs hover:text-gray-400"
+                        disabled={index === 0}
+                      >
+                        ▲
+                      </button>
+                      <button
+                        onClick={() => moveDown(index)}
+                        className="text-white text-xs hover:text-gray-400"
+                        disabled={index === data.length - 1}
+                      >
+                        ▼
+                      </button>
+                    </td>
                     <td className="px-4 py-4">
                       <ContentEditable
                         html={processo.titulo}
